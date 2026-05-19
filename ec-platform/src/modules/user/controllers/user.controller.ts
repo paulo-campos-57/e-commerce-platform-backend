@@ -31,7 +31,7 @@ export class UserController {
   @Post('login')
   @HttpCode(HttpStatus.OK)
   async login(@Body() loginDto: LoginDto) {
-    const user = await this.authService.validateUser(loginDto);
+    const user = await this.authService.login(loginDto);
 
     return {
       message: 'Login successful',
