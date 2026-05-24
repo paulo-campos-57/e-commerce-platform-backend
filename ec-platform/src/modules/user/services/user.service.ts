@@ -11,13 +11,14 @@ import { UpdateUserDto } from '../dto/update-user.dto';
 import { User } from '../entities/user.entity';
 
 import * as bcrypt from 'bcrypt';
+import { IUserService } from '../interfaces/user.service.interface';
 
 @Injectable()
-export class UserService {
+export class UserService implements IUserService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly configService: ConfigService,
-  ) {}
+  ) { }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const hasEmail = await this.userRepository.findByEmail(createUserDto.email);
@@ -55,6 +56,14 @@ export class UserService {
     return user;
   }
 
+  async findById(id: string): Promise<User | null> {
+    const user = await this.userRepository.findById(id);
+
+    if (!user) throw new NotFoundException(`User with id ${id} not found.`);
+
+    return user;
+  }
+
   async update(id: string, updateUserDto: UpdateUserDto): Promise<User | null> {
     if (updateUserDto.password) {
       const saltRounds =
@@ -72,11 +81,11 @@ export class UserService {
     return updatedUser;
   }
 
-  async delete(id: string): Promise<void> {
+  async delete(id: string): Promise<boolean> {
     const deleted = await this.userRepository.deleteUser(id);
 
     if (!deleted) throw new NotFoundException(`User with id ${id} not found.`);
 
-    return;
+    return deleted;
   }
 }

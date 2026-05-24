@@ -9,7 +9,7 @@ export class UserRepository implements IUserRepository {
   constructor(
     @InjectRepository(User)
     private readonly repository: Repository<User>,
-  ) {}
+  ) { }
 
   async createUser(data: CreateUserDto): Promise<User> {
     const user = this.repository.create(data);
@@ -22,6 +22,10 @@ export class UserRepository implements IUserRepository {
 
   async findByEmail(email: string): Promise<User | null> {
     return this.repository.findOneBy({ email });
+  }
+
+  async findById(id: string): Promise<User | null> {
+    return this.repository.findOneBy({ id });
   }
 
   async updateUser(id: string, data: UpdateUserDto) {

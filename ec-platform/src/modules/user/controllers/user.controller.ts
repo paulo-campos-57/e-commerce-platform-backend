@@ -20,9 +20,9 @@ export class UserController {
   constructor(
     private readonly userService: UserService,
     private readonly authService: AuthService,
-  ) {}
+  ) { }
 
-  @Post()
+  @Post('register')
   @HttpCode(HttpStatus.CREATED)
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
@@ -44,17 +44,22 @@ export class UserController {
     return this.userService.findAll();
   }
 
-  @Get(':email')
+  @Get('find/:email')
   findByEmail(@Param('email') email: string) {
     return this.userService.findByEmail(email);
   }
 
-  @Patch(':id')
+  @Get('find/:id')
+  findById(@Param('id') id: string) {
+    return this.userService.findById(id);
+  }
+
+  @Patch('update/:id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(id, updateUserDto);
   }
 
-  @Delete(':id')
+  @Delete('delete/:id')
   delete(@Param('id') id: string) {
     return this.userService.delete(id);
   }
