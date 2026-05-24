@@ -25,7 +25,10 @@ export class UserController {
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
   create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+    return {
+      message: 'Usuário criado com sucesso',
+      user: this.userService.create(createUserDto),
+    };
   }
 
   @Post('login')
