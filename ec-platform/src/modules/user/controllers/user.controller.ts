@@ -20,7 +20,7 @@ export class UserController {
   constructor(
     private readonly userService: UserService,
     private readonly authService: AuthService,
-  ) { }
+  ) {}
 
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
@@ -34,33 +34,48 @@ export class UserController {
     const user = await this.authService.login(loginDto);
 
     return {
-      message: 'Login successful',
+      message: 'Login realizado com sucesso',
       user,
     };
   }
 
   @Get()
   findAll() {
-    return this.userService.findAll();
+    return {
+      message: 'Lista de usuários',
+      users: this.userService.findAll(),
+    };
   }
 
   @Get('find/:email')
   findByEmail(@Param('email') email: string) {
-    return this.userService.findByEmail(email);
+    return {
+      message: 'Usuário encontrado',
+      user: this.userService.findByEmail(email),
+    };
   }
 
   @Get('find/:id')
   findById(@Param('id') id: string) {
-    return this.userService.findById(id);
+    return {
+      message: 'Usuário encontrado',
+      user: this.userService.findById(id),
+    };
   }
 
   @Patch('update/:id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(id, updateUserDto);
+    return {
+      message: 'Usuário atualizado',
+      user: this.userService.update(id, updateUserDto),
+    };
   }
 
   @Delete('delete/:id')
   delete(@Param('id') id: string) {
-    return this.userService.delete(id);
+    return {
+      message: 'Usuário deletado',
+      user: this.userService.delete(id),
+    };
   }
 }

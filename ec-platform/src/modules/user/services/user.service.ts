@@ -18,7 +18,7 @@ export class UserService implements IUserService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly configService: ConfigService,
-  ) { }
+  ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const hasEmail = await this.userRepository.findByEmail(createUserDto.email);

@@ -9,7 +9,7 @@ export class UserRepository implements IUserRepository {
   constructor(
     @InjectRepository(User)
     private readonly repository: Repository<User>,
-  ) { }
+  ) {}
 
   async createUser(data: CreateUserDto): Promise<User> {
     const user = this.repository.create(data);
