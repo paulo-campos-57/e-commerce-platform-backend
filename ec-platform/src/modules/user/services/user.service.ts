@@ -18,7 +18,7 @@ export class UserService implements IUserService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly configService: ConfigService,
-  ) {}
+  ) { }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const hasEmail = await this.userRepository.findByEmail(createUserDto.email);
@@ -26,9 +26,7 @@ export class UserService implements IUserService {
     if (hasEmail) {
       throw new ConflictException('Email already exists.');
     }
-
-    const saltRounds =
-      this.configService.get<number>('BCRYPT_SALT_ROUNDS') ?? 10;
+    const saltRounds = Number(this.configService.get('BCRYPT_SALT_ROUNDS')) || 10;
 
     const hashedPassword = await bcrypt.hash(
       createUserDto.password,
