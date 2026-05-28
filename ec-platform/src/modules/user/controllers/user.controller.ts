@@ -48,6 +48,16 @@ export class UserController {
     };
   }
 
+  @Get('check-admin')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
+  async checkAdmin() {
+    return {
+      ok: true,
+      role: UserRole.ADMIN,
+    };
+  }
+
   @Get()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
