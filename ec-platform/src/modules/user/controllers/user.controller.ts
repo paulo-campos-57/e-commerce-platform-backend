@@ -8,12 +8,17 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from '../services/user.service';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { LoginDto } from '../dto/login.dto';
 import { AuthService } from '../../auth/services/auth.service';
 import { UpdateUserDto } from '../dto/update-user.dto';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../../auth/guards/role.guard';
+import { Roles } from '../../auth/decorators/role.decorator';
+import { UserRole } from '../entities/user.entity';
 
 @Controller('users')
 export class UserController {
@@ -24,10 +29,11 @@ export class UserController {
 
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
-  create(@Body() createUserDto: CreateUserDto) {
+  async create(@Body() createUserDto: CreateUserDto) {
+    const user = await this.userService.create(createUserDto);
     return {
       message: 'Usuário criado com sucesso',
-      user: this.userService.create(createUserDto),
+      user,
     };
   }
 
@@ -43,42 +49,57 @@ export class UserController {
   }
 
   @Get()
-  findAll() {
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
+  async findAll() {
+    const users = await this.userService.findAll();
     return {
       message: 'Lista de usuários',
-      users: this.userService.findAll(),
+      users,
     };
   }
 
   @Get('find/:email')
-  findByEmail(@Param('email') email: string) {
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
+  async findByEmail(@Param('email') email: string) {
+    const user = await this.userService.findByEmail(email);
     return {
       message: 'Usuário encontrado',
-      user: this.userService.findByEmail(email),
+      user,
     };
   }
 
   @Get('find/:id')
-  findById(@Param('id') id: string) {
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
+  async findById(@Param('id') id: string) {
+    const user = await this.userService.findById(id);
     return {
       message: 'Usuário encontrado',
-      user: this.userService.findById(id),
+      user,
     };
   }
 
   @Patch('update/:id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    const user = await this.userService.update(id, updateUserDto);
     return {
       message: 'Usuário atualizado',
-      user: this.userService.update(id, updateUserDto),
+      user,
     };
   }
 
   @Delete('delete/:id')
-  delete(@Param('id') id: string) {
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
+  async delete(@Param('id') id: string) {
+    const user = await this.userService.delete(id);
     return {
       message: 'Usuário deletado',
-      user: this.userService.delete(id),
+      user,
     };
   }
 }
