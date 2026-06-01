@@ -66,9 +66,7 @@ describe('User Authentication & Role Authorization (e2e)', () => {
   });
 
   it('should reject access to GET /users when not authenticated', async () => {
-    await request(app.getHttpServer())
-      .get('/users')
-      .expect(401);
+    await request(app.getHttpServer()).get('/users').expect(401);
   });
 
   it('should reject access to GET /users for non-admin users', async () => {
