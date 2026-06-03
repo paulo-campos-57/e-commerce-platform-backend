@@ -8,6 +8,7 @@ import {
   Param,
   Patch,
   Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from '../services/user.service';
@@ -87,6 +88,19 @@ export class UserController {
     const user = await this.userService.findById(id);
     return {
       message: 'Usuário encontrado',
+      user,
+    };
+  }
+
+  @Patch('update-me')
+  @UseGuards(JwtAuthGuard)
+  async updateMe(@Req() req: any, @Body() updateUserDto: UpdateUserDto) {
+    const userId = req.user.id;
+    const dataToUpdate = { ...updateUserDto };
+    delete dataToUpdate.role;
+    const user = await this.userService.update(userId, dataToUpdate);
+    return {
+      message: 'Usuário atualizado com sucesso',
       user,
     };
   }
