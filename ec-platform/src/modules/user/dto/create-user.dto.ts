@@ -24,6 +24,9 @@ export class CreateUserDto {
   @IsNotEmpty()
   password!: string;
 
+  @IsString()
+  state!: string;
+
   @IsArray()
   @IsOptional()
   @IsString({ each: true })

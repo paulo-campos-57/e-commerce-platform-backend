@@ -19,6 +19,9 @@ export class User {
   @Column()
   password: string;
 
+  @Column({ default: 'SP' })
+  state: string;
+
   @Column({ type: 'simple-array', nullable: true })
   preferences: string[];
 

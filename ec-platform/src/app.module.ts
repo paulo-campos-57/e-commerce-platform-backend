@@ -10,6 +10,7 @@ import { UserModule } from './modules/user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { LoggerMiddleware } from './common/middlewares/logger';
+import { RecommendationModule } from './modules/recommendation/recommendation.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { LoggerMiddleware } from './common/middlewares/logger';
       synchronize: true,
     }),
     UserModule,
+    RecommendationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
