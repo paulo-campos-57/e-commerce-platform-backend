@@ -10,11 +10,11 @@ export class RecommendationController {
         @Query('customerId') customerId: string,
         @Query('productId') productId?: string,
     ) {
-        const listaDeIds = await this.recommendationService.buscarRecomendacoes(customerId, productId);
+        const produtosDetalhados = await this.recommendationService.buscarRecomendacoes(customerId, productId);
 
         return {
             success: true,
-            data: listaDeIds,
+            data: produtosDetalhados,
         };
     }
 }
